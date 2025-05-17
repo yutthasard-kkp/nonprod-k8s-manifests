@@ -21,7 +21,7 @@ spec:
         app: payment-service
     spec:
       containers:
-        - image: payment-service:latest
+        - image: yudthasard/payment-service:v1.0.0
           name: payment-service
           envFrom:
             - configMapRef:
