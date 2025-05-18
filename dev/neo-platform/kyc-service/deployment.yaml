@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kyc-service
+  name: kyc-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kyc-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: kyc-service
+    spec:
+      containers:
+        - image: yudthasard/payment-service:v1.0.0
+          name: kyc-service
+          envFrom:
+            - configMapRef:
+                name: kyc-service
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+      restartPolicy: Always
+
+status: {}
